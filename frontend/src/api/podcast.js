@@ -16,3 +16,26 @@ export const getPodcastUsuario = async (data) =>{
         console.log("Error en axios: ", error)
     }
 }
+
+export const getSuggestion = async (data) => {
+    try {
+        return await axios.post(APIBASE, data)
+    } catch (error) {
+        console.log("Error en axios: ", error)
+    }
+}
+
+export const insertSugerencia = async (data) =>{
+    try {
+        return await axios.post(APIBASE, data)
+    } catch (error) {
+        console.log("Error en axios: ", error)
+    }
+}
+export const deleteSugerencia = async (data) =>{
+    try {
+        return await axios.post(APIBASE, data)
+    } catch (error) {
+        console.log("Error en axios: ",error)
+    }
+}

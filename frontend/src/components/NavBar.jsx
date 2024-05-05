@@ -15,11 +15,11 @@ export default function NavBar() {
   const [data, setData] = useState([]);
   const { id } = user.result;
   const [errors, setErrors] = useState(null);
-  console.log("podcasssstss : ", podcasts);
-  console.log("user: ", user);
+  // console.log("podcasssstss : ", podcasts);
+  // console.log("user: ", user);
   const profileuser = user.result.nombre;
   const userid = user.result.id;
-  console.log("user id: ", userid);
+  // console.log("user id: ", userid);
   useEffect(() => {
     const getData = async () => {
       try {
@@ -28,10 +28,9 @@ export default function NavBar() {
         formData.append("userid", id);
         const response = await getPodcastUserGeneral(formData);
         const dataresult = response.data;
-        console.log("data result: ", response)
+        // console.log("data result: ", response)
         if (response.status === 200 && dataresult.success) {
           const mensaje = dataresult.message;
-  
           const filtrado = mensaje.filter(podcast => podcast.estado === 1);
           filtrado.length >= 1 ? setData(filtrado) : setErrors("No tienes podcasts activos debido a una deuda");
          await updatePodcasts( filtrado );
@@ -54,12 +53,13 @@ export default function NavBar() {
 
   return (
     <>
-      <Navbar expand="lg" className="bg-black shadow" data-bs-theme="dark">
+      <Navbar expand="lg" className="bg-black shadow position-sticky" style={{top:"0", zIndex: "99"}} data-bs-theme="dark">
         <Container>
           <Navbar.Brand href="/dashboard">
             <img
-              // src="https://tupodcast.pe/wp-content/uploads/2023/11/cropped-tupodcast-200x67.webp"
+              src="https://tupodcast.pe/wp-content/uploads/2023/11/cropped-tupodcast-200x67.webp"
               alt="Tu podcast logo"
+              className="text-white"
               style={{ width: "180px" }}
             />
           </Navbar.Brand>

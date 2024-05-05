@@ -81,58 +81,56 @@ img {
   transition: var(--transition150);
 }
 .bg-principal {
-    background-color: #0d0d0d ;
-    min-height: 100vh;
+  background-color: #0d0d0d;
+  min-height: 100vh;
 }
 .background-radial-gradient {
-    background-color: #0f0f0f;
-    background-image: 
+  background-color: #0f0f0f;
+  background-image: radial-gradient(
+      37.88% 68.62% at 50% 0,
+      rgba(255, 182, 0, 0.3) 0,
+      rgba(0, 124, 71, 0) 80%
+    ),
     radial-gradient(
-        37.88% 68.62% at 50% 0,
-        rgba(255, 182, 0, 0.3) 0,
-        rgba(0, 124, 71, 0) 80%
-      ),
-
-      radial-gradient(
-        100% 28.09% at 100% 10%,
-        rgba(255, 182, 0, 0.2) 0,
-        rgba(0, 182, 71, 0.1) 80%,
-        rgba(0, 182, 71, 0) 100%
-      ),
-      linear-gradient(
-        180deg,
-        rgba(0, 182, 71, 0.075) 35.79%,
-        rgba(0, 182, 71, 0.05) 80%,
-        #13161c
-      ),
-      radial-gradient(
-        74.84% 135.56% at 100% 10%,
-        rgba(255, 182, 0, 0.5) 0,
-        #13161c 80%
-      );
+      100% 28.09% at 100% 10%,
+      rgba(255, 182, 0, 0.2) 0,
+      rgba(0, 182, 71, 0.1) 80%,
+      rgba(0, 182, 71, 0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 182, 71, 0.075) 35.79%,
+      rgba(0, 182, 71, 0.05) 80%,
+      #13161c
+    ),
+    radial-gradient(
+      74.84% 135.56% at 100% 10%,
+      rgba(255, 182, 0, 0.5) 0,
+      #13161c 80%
+    );
   min-height: 100vh;
   background-attachment: fixed;
 }
-.vh-100{
+.vh-100 {
   min-height: 100vh !important;
 }
 .bg-course {
-    background: linear-gradient(
-        180deg,
-        rgba(10, 233, 138, 0.48),
-        rgba(10, 233, 138, 0) 42.31%
-      ),
-      radial-gradient(
-        326.4% 182.46% at 100% 0,
-        rgba(10, 233, 138, 0.368) 0,
-        rgba(0, 170, 99, 0.4) 25.86%,
-        rgba(0, 196, 114, 0.4) 26.01%,
-        rgba(6, 207, 195, 0.204) 87.98%,
-        rgba(11, 216, 130, 0) 100%
-      );
-    min-height: 100vh;
-    /* min-width: 100vh; */
-  }
+  background: linear-gradient(
+      180deg,
+      rgba(10, 233, 138, 0.48),
+      rgba(10, 233, 138, 0) 42.31%
+    ),
+    radial-gradient(
+      326.4% 182.46% at 100% 0,
+      rgba(10, 233, 138, 0.368) 0,
+      rgba(0, 170, 99, 0.4) 25.86%,
+      rgba(0, 196, 114, 0.4) 26.01%,
+      rgba(6, 207, 195, 0.204) 87.98%,
+      rgba(11, 216, 130, 0) 100%
+    );
+  min-height: 100vh;
+  /* min-width: 100vh; */
+}
 #radius-shape-1 {
   height: 220px;
   width: 220px;
@@ -152,11 +150,11 @@ img {
   overflow: hidden;
 }
 .bg-principal-s {
-    background-color: #13161c !important;
-  }
-  .text-primarys {
-    color: var(--bs-success) !important;
-  }
+  background-color: #13161c !important;
+}
+.text-primarys {
+  color: var(--bs-success) !important;
+}
 .bg-glass {
   background-color: hsla(0, 0%, 100%, 0.9) !important;
   backdrop-filter: saturate(200%) blur(25px);
@@ -169,6 +167,37 @@ img {
 }
 .location-cont:hover .location-ref {
   display: flex;
+}
+.form_sugerencia {
+  position: sticky;
+  bottom: 20px;
+  background-color: #0d0d0d;
+}
+.height_sugestion
+{
+  min-height: 240px;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+/* Ponemos un color de fondo y redondeamos las esquinas del thumb */
+.height_sugestion::-webkit-scrollbar {
+  width: 4px;     /* Tamaño del scroll en vertical */
+  height: 2px;    /* Tamaño del scroll en horizontal */
+
+}
+.height_sugestion::-webkit-scrollbar-thumb {
+  background: var( --bs-success);
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+.height_sugestion::-webkit-scrollbar-thumb:hover {
+  background: var( --bs-success);
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+.height_sugestion::-webkit-scrollbar-thumb:active {
+  background: var( --bs-success);
 }
 
 @media screen and (max-width: 1400px) {

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { userAuth } from "../hooks/AuthProvider";
 import { LoginUser } from "../api/auth";
 import { Toasts } from "../components/Toasts";
+import Row from "react-bootstrap/esm/Row";
 
 export const Login =()=> {
   const [email, setEmail] = useState("");
@@ -18,7 +19,9 @@ const {login}  = userAuth();
       formData.append("pass", password);
       const response = await LoginUser(formData);
       const result = response.data;
+      console.log("___________________")
       console.log(response)
+      console.log("___________________")
       if (result.success === true) {
         console.log("Entro a true: ", result);
         const { token } = result;
@@ -36,7 +39,7 @@ const {login}  = userAuth();
       //     backgroundColor: "#ff4d4d"
       // }).showToast();
 
-        console.log("entró al false: ", result.message);
+        console.log("entró al false: ", result);
       }
     } catch (error) {
       console.error(error);
@@ -54,7 +57,7 @@ const {login}  = userAuth();
       <section className="overflow-hidden bg-course">
         <div className="px-0 py-0 px-sm-04 py-sm-5  background-radial-gradient d-flex justify-content-center align-items-center">
           <div className="container my-5  ">
-            <div className="row gx-lg-5 align-items-center mb-5 ">
+            <Row className="gx-lg-5 align-items-center mb-5 ">
               <div
                 className="col-lg-7 mb-5 mb-lg-0 order-2 order-md-1"
                 style={{zIndex: "10"}}
@@ -138,7 +141,7 @@ const {login}  = userAuth();
                   </div>
                 </div>
               </div>
-            </div>
+            </Row>
           </div>
         </div>
       </section>

@@ -1,204 +1,129 @@
-import React from 'react'
-import Row from 'react-bootstrap/esm/Row'
-import { TittleComponent } from './TittleComponent'
+import Col from "react-bootstrap/esm/Col";
+import Row from "react-bootstrap/esm/Row";
+import CardBody from "react-bootstrap/esm/CardBody";
+import Card from "react-bootstrap/esm/Card";
+import CardHeader from "react-bootstrap/esm/CardHeader";
+import CardText from "react-bootstrap/esm/CardText";
 
-export const SuggesstionComponent = () => {
+import Button from "react-bootstrap/esm/Button";
+import { useEffect, useRef, useState } from "react";
+import { deleteSugerencia, getSuggestion } from "../api/podcast";
+import { userAuth } from "../hooks/AuthProvider";
+import { MensajeComponent } from "./MensajeComponent";
+export const SuggesstionComponent = ({ idpocast }) => {
+  const { user } = userAuth();
+  const [suggestion, setSuggestion] = useState([]);
+  const [error, setError] = useState([]);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const suggestionContainerRef = useRef(null);
+
+  const addSugerencia = (newSugerencia) => {
+    setSuggestion([...suggestion, newSugerencia]);
+  };
+  // delete data
+  const handleRemove = async (id) => {
+    try {
+      const formData = new FormData();
+      formData.append("action", "deletesuggestion");
+      formData.append("id", parseInt(id));
+      const deletedata = await deleteSugerencia(formData);
+      console.log("delte: ", deletedata)
+    } catch (error) {
+      console.log("entro al catch: ", error);
+    }
+  };
+
+  useEffect(() => {
+    const getDatas = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("action", "get_suggestion");
+        formData.append("idpodcast", parseInt(idpocast));
+        const response = await getSuggestion(formData);
+        const dataresult = response.data;
+        if (dataresult.success === false) {
+          setError(dataresult.message);
+        } else {
+          setSuggestion(dataresult.message);
+          setError(null);
+        }
+      } catch (error) {
+        console.log("entro al catch: ", error);
+      }
+    };
+    getDatas();
+  }, [idpocast, suggestion]);
+
+  useEffect(() => {
+    if (suggestionContainerRef.current && !isScrolling) {
+      suggestionContainerRef.current.scrollTop =
+        suggestionContainerRef.current.scrollHeight;
+    }
+  }, [suggestion, isScrolling]);
+
+  const handleScroll = () => {
+    setIsScrolling(true);
+  };
+
   return (
-    <Row>
-      <h6 className='text-white fw-bold'>Sugerencias</h6>
-      <section >
-  <div class="container py-5">
+    <Row style={{ minHeight: "50px" }}>
+      <h4 className="text-white fw-bold">Sugerencias</h4>
 
-    <div class="row">
-
-      <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
-
-        <h5 class="font-weight-bold mb-3 text-center text-lg-start">Member</h5>
-
-        <div class="card">
-          <div class="card-body">
-
-            <ul class="list-unstyled mb-0">
-              <li class="p-2 border-bottom" >
-                <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-8.webp" alt="avatar"
-                      class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" />
-                    <div class="pt-1">
-                      <p class="fw-bold mb-0">John Doe</p>
-                      <p class="small text-muted">Hello, Are you there?</p>
-                    </div>
-                  </div>
-                  <div class="pt-1">
-                    <p class="small text-muted mb-1">Just now</p>
-                    <span class="badge bg-danger float-end">1</span>
-                  </div>
-                </a>
-              </li>
-              <li class="p-2 border-bottom">
-                <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-1.webp" alt="avatar"
-                      class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" />
-                    <div class="pt-1">
-                      <p class="fw-bold mb-0">Danny Smith</p>
-                      <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                    </div>
-                  </div>
-                  <div class="pt-1">
-                    <p class="small text-muted mb-1">5 mins ago</p>
-                  </div>
-                </a>
-              </li>
-              <li class="p-2 border-bottom">
-                <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-2.webp" alt="avatar"
-                      class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" />
-                    <div class="pt-1">
-                      <p class="fw-bold mb-0">Alex Steward</p>
-                      <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                    </div>
-                  </div>
-                  <div class="pt-1">
-                    <p class="small text-muted mb-1">Yesterday</p>
-                  </div>
-                </a>
-              </li>
-              <li class="p-2 border-bottom">
-                <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-3.webp" alt="avatar"
-                      class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" />
-                    <div class="pt-1">
-                      <p class="fw-bold mb-0">Ashley Olsen</p>
-                      <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                    </div>
-                  </div>
-                  <div class="pt-1">
-                    <p class="small text-muted mb-1">Yesterday</p>
-                  </div>
-                </a>
-              </li>
-              <li class="p-2 border-bottom">
-                <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-4.webp" alt="avatar"
-                      class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" />
-                    <div class="pt-1">
-                      <p class="fw-bold mb-0">Kate Moss</p>
-                      <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                    </div>
-                  </div>
-                  <div class="pt-1">
-                    <p class="small text-muted mb-1">Yesterday</p>
-                  </div>
-                </a>
-              </li>
-              <li class="p-2 border-bottom">
-                <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
-                      class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" />
-                    <div class="pt-1">
-                      <p class="fw-bold mb-0">Lara Croft</p>
-                      <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                    </div>
-                  </div>
-                  <div class="pt-1">
-                    <p class="small text-muted mb-1">Yesterday</p>
-                  </div>
-                </a>
-              </li>
-              <li class="p-2">
-                <a href="#!" class="d-flex justify-content-between">
-                  <div class="d-flex flex-row">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
-                      class="rounded-circle d-flex align-self-center me-3 shadow-1-strong" width="60" />
-                    <div class="pt-1">
-                      <p class="fw-bold mb-0">Brad Pitt</p>
-                      <p class="small text-muted">Lorem ipsum dolor sit.</p>
-                    </div>
-                  </div>
-                  <div class="pt-1">
-                    <p class="small text-muted mb-1">5 mins ago</p>
-                    <span class="text-muted float-end"><i class="fas fa-check" aria-hidden="true"></i></span>
-                  </div>
-                </a>
-              </li>
-            </ul>
-
-          </div>
-        </div>
-
+      <div className="container">
+        {error ? (
+          <p className="text-danger fw-bold">No se encontraron sugestioness</p>
+        ) : (
+          <>
+            <Row
+              className="height_sugestion"
+              ref={suggestionContainerRef}
+              onScroll={handleScroll}
+            >
+              <Col className="position-relative">
+                <ul className="list-unstyled">
+                  {suggestion.map((item) => (
+                    <li
+                      className="d-flex justify-content-between mb-4 "
+                      key={item.id}
+                    >
+                      <Card className="bg-warning w-100">
+                        <CardHeader className="d-flex justify-content-between align-items-center">
+                          <p className="fw-bold mb-0">{user.result.nombre}</p>{" "}
+                          <div className="d-flex justify-content-between align-items-center gap-2">
+                            <p className="text-muted small mb-0">
+                              <i className="far fa-clock"></i> {item.fecha}
+                            </p>
+                            <button
+                              type="button"
+                              className="btn-close bg-success"
+                              aria-label="Close"
+                              onClick={() => handleRemove(item.id)}
+                            ></button>
+                          </div>
+                        </CardHeader>
+                        <CardBody className="bg-black rounded-bottom">
+                          <CardText className="text-warning">
+                            {item.suggestion}
+                          </CardText>
+                        </CardBody>
+                      </Card>
+                      <img
+                        src={`http://localhost/tupodcast/backend/assets/${user.result.profile}`}
+                        alt="avatar"
+                        className="rounded-circle d-flex align-self-start ms-3 shadow-1-strong"
+                        style={{ width: "60px" }}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </Col>
+            </Row>
+          </>
+        )}
+        <Row>
+          <MensajeComponent addSugerencia={addSugerencia} idpocast={idpocast} />
+        </Row>
       </div>
-
-      <div class="col-md-6 col-lg-7 col-xl-8">
-
-        <ul class="list-unstyled">
-          <li class="d-flex justify-content-between mb-4">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
-              class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60" />
-            <div class="card">
-              <div class="card-header d-flex justify-content-between p-3">
-                <p class="fw-bold mb-0">Brad Pitt</p>
-                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 12 mins ago</p>
-              </div>
-              <div class="card-body">
-                <p class="mb-0">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                  labore et dolore magna aliqua.
-                </p>
-              </div>
-            </div>
-          </li>
-          <li class="d-flex justify-content-between mb-4">
-            <div class="card w-100">
-              <div class="card-header d-flex justify-content-between p-3">
-                <p class="fw-bold mb-0">Lara Croft</p>
-                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 13 mins ago</p>
-              </div>
-              <div class="card-body">
-                <p class="mb-0">
-                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                  laudantium.
-                </p>
-              </div>
-            </div>
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
-              class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60" />
-          </li>
-          <li class="d-flex justify-content-between mb-4">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp" alt="avatar"
-              class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60" /> 
-            <div class="card">
-              <div class="card-header d-flex justify-content-between p-3">
-                <p class="fw-bold mb-0">Brad Pitt</p>
-                <p class="text-muted small mb-0"><i class="far fa-clock"></i> 10 mins ago</p>
-              </div>
-              <div class="card-body">
-                <p class="mb-0">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                  labore et dolore magna aliqua.
-                </p>
-              </div>
-            </div>
-          </li>
-          <li class="bg-white mb-3">
-            <div data-mdb-input-init class="form-outline">
-              <textarea class="form-control" id="textAreaExample2" rows="4"></textarea>
-              <label class="form-label" for="textAreaExample2">Message</label>
-            </div>
-          </li>
-          <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-info btn-rounded float-end">Send</button>
-        </ul>
-
-      </div>
-
-    </div>
-
-  </div>
-</section>
     </Row>
-  )
-}
+  );
+};

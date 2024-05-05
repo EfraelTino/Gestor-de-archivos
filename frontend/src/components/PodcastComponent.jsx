@@ -12,7 +12,7 @@ export const PodcastComponent = () => {
   const { number } = useParams();
   const { podcasts, user } = userAuth();
   const idUsuario = user.result.id;
-  console.log("id del usuario: ", idUsuario);
+  // console.log("id del usuario: ", idUsuario);
   const navigate = useNavigate();
   const podcastItems = podcasts.map((item) => {
     return {
