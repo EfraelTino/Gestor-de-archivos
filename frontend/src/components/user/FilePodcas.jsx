@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getPodcastUsuario } from "../api/podcast";
+import { getPodcastUsuario } from "../../api/podcast";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import { SuggesstionComponent } from "./SuggesstionComponent";
-import { TittleComponent } from "./TittleComponent";
-import { LoadingComponent } from "./LoadingComponent";
 
 export const FilePodcas = ({ idpocast, number }) => {
   const [error, setError] = useState(null);
@@ -20,8 +18,6 @@ export const FilePodcas = ({ idpocast, number }) => {
         const response = await getPodcastUsuario(formData);
         const dataresult = response.data;
         if (response.status === 200 && dataresult.success) {
-          // console.log("podcasts : ", response);
-
           const podcasts = dataresult.message.filter((data) => data.tipo === 0);
           const short = dataresult.message.filter((data) => data.tipo === 1);
           const archivo = dataresult.message.filter((data) => data.tipo === 2);
@@ -33,7 +29,8 @@ export const FilePodcas = ({ idpocast, number }) => {
           setError(dataresult.message || "Error al obtener datos");
         }
       } catch (error) {
-        console.log("entro al catch: ", error);
+        setError( "Error inesperado, intente más tarde");
+
       }
     };
     getPodcast();
@@ -41,7 +38,6 @@ export const FilePodcas = ({ idpocast, number }) => {
 
   return (
     <>
-      {/* <LoadingComponent /> */}
       <Row>
         <Col>
           <div className="mb-5">

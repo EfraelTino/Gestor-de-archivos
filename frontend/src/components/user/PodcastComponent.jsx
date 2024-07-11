@@ -2,17 +2,18 @@ import React, { useEffect } from "react";
 import Container from "react-bootstrap/esm/Container";
 import { TittleComponent } from "./TittleComponent";
 import { useNavigate, useParams } from "react-router-dom";
-import { userAuth } from "../hooks/AuthProvider";
+import { userAuth } from "../../hooks/AuthProvider";
 import { FilePodcas } from "./FilePodcas";
 import Col from "react-bootstrap/esm/Col";
 import Row from "react-bootstrap/esm/Row";
-import { SuggesstionComponent } from "./SuggesstionComponent";
+import { Helmet } from "react-helmet";
 
 export const PodcastComponent = () => {
   const { number } = useParams();
   const { podcasts, user } = userAuth();
   const idUsuario = user.result.id;
-  // console.log("id del usuario: ", idUsuario);
+
+
   const navigate = useNavigate();
   const podcastItems = podcasts.map((item) => {
     return {
@@ -28,10 +29,9 @@ export const PodcastComponent = () => {
     (data) => data.orden === parseInt(number)
   );
   const podcastUsuario = podcastItems
-  .filter((item) => item.orden === parseInt(number))
-  .map((item) => item.id_usuario);
+    .filter((item) => item.orden === parseInt(number))
+    .map((item) => item.id_usuario);
 
-    console.log("podcast usuario : ", podcastUsuario[0]);
   const titles = podcastItems
     .filter((item) => item.orden === parseInt(number))
     .map((item) => item.titulo);
@@ -46,30 +46,36 @@ export const PodcastComponent = () => {
   useEffect(() => {
     if (filterData.length === 0) {
       navigate("/dashboard");
-    }else if(parseInt(podcastUsuario) !== parseInt(idUsuario)){
-      return     navigate("/dashboard");
+    } else if (parseInt(podcastUsuario) !== parseInt(idUsuario)) {
+      return navigate("/dashboard");
     }
-  }, [filterData]);
+  }, [filterData, number]);
 
   return (
-    <div className="p-5 bg-principal">
-      <Container>
-        <TittleComponent addclass="fw-bold">
-          {" "}
-          {titles.join(", ")}{" "}
-        </TittleComponent>
-        <p>
-          <small>
-            <strong className="text-white">Fecha de producción: </strong>
-          </small>{" "}
-          <span className="text-white">{fecha}</span>
-        </p>
-        <Row>
-          <Col>
-            <FilePodcas idpocast={id_podcast} number={number} />
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Podcast {number} | TU PODCAST</title>
+      </Helmet>
+      <div className="p-5 bg-principal">
+        <Container>
+          <TittleComponent addclass="fw-bold">
+            {" "}
+            {titles.join(", ")}{" "}
+          </TittleComponent>
+          <p>
+            <small>
+              <strong className="text-white">Fecha de producción: </strong>
+            </small>{" "}
+            <span className="text-white">{fecha}</span>
+          </p>
+          <Row>
+            <Col>
+              <FilePodcas idpocast={id_podcast} number={number} />
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    </>
   );
 };

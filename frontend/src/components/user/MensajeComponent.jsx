@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { insertSugerencia } from "../api/podcast";
+import { insertSugerencia } from "../../api/podcast";
+import { Notify } from "./Notify";
+import {  toast } from 'react-toastify';
 
 export const MensajeComponent = ({ addSugerencia, idpocast }) => {
     // export const MensajeComponent = ({ addSugerencia, idpocast }) => {
   const [sugerencia, setSsugerencia] = useState("");
-  const handleSugerencia = async (e) => {
+  const [error, setError] = useState("");
+  const handleSugerencia =  async (e) => {
     e.preventDefault();
-
     try {
         const formData = new FormData();
         formData.append("action", "updatesuggestion");
@@ -23,22 +25,21 @@ export const MensajeComponent = ({ addSugerencia, idpocast }) => {
             };
             addSugerencia(newSugerencia);
             setSsugerencia("");
-            // sugerencia.push({
-                
-            // })
         }else{
-            console.log(response.message)
+          setError(toast.error(response.message)) 
         }
-
     } catch (error) {
-        console.log("ERROR EN HANDLESUGERENCIA: ", error)
+        setError(toast.error(error)) 
     }
   };
   return (
     <>
+     {error && (
+        <Notify error={error}/>
+      )}
       <form onSubmit={handleSugerencia} className="form_sugerencia pt-4">
         <div data-mdb-input-init className="form-outline mb-3 bg-black">
-          <textarea
+          <input
             className="form-control bg-white   rounded text-black"
             id="sugerencia"
             value={sugerencia}

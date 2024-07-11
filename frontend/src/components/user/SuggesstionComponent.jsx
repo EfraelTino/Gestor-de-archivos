@@ -5,10 +5,9 @@ import Card from "react-bootstrap/esm/Card";
 import CardHeader from "react-bootstrap/esm/CardHeader";
 import CardText from "react-bootstrap/esm/CardText";
 
-import Button from "react-bootstrap/esm/Button";
 import { useEffect, useRef, useState } from "react";
-import { deleteSugerencia, getSuggestion } from "../api/podcast";
-import { userAuth } from "../hooks/AuthProvider";
+import { deleteSugerencia, getSuggestion } from "../../api/podcast";
+import { userAuth } from "../../hooks/AuthProvider";
 import { MensajeComponent } from "./MensajeComponent";
 export const SuggesstionComponent = ({ idpocast }) => {
   const { user } = userAuth();
@@ -27,9 +26,9 @@ export const SuggesstionComponent = ({ idpocast }) => {
       formData.append("action", "deletesuggestion");
       formData.append("id", parseInt(id));
       const deletedata = await deleteSugerencia(formData);
-      console.log("delte: ", deletedata)
     } catch (error) {
-      console.log("entro al catch: ", error);
+      setError(error);
+
     }
   };
 
@@ -48,7 +47,7 @@ export const SuggesstionComponent = ({ idpocast }) => {
           setError(null);
         }
       } catch (error) {
-        console.log("entro al catch: ", error);
+        setError(error);
       }
     };
     getDatas();

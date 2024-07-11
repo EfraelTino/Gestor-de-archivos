@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { userAuth } from "../hooks/AuthProvider";
 import { LoginUser } from "../api/auth";
-import { Toasts } from "../components/Toasts";
 import Row from "react-bootstrap/esm/Row";
-
-export const Login =()=> {
+import { Helmet } from "react-helmet";
+import { Notify } from "../components/user/Notify";
+import { toast } from "react-toastify";
+import { validateEmail } from "../utils/util";
+import { validateLength } from "../utils/util";
+import { useNavigate } from "react-router-dom";
+export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-const {login}  = userAuth();
-
+  const [error, setError] = useState("");
+  const [errordata, setErrorData] = useState({ emaildata: "", passdata: "" });
+  const { login } = userAuth();
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -19,52 +25,45 @@ const {login}  = userAuth();
       formData.append("pass", password);
       const response = await LoginUser(formData);
       const result = response.data;
-      console.log("___________________")
-      console.log(response)
-      console.log("___________________")
+
       if (result.success === true) {
-        console.log("Entro a true: ", result);
         const { token } = result;
-        console.log(result)
+
         if (token) {
-          await login ({result});
-          console.log(token)
-        }else{
-          console.log("token no generado")
+          console.log("token: ", result);
+          await login({ result });
+          navigate("/dashboard");
+        } else {
+          setError(toast.error("Error inesperado intent de nuevo"));
         }
       } else {
-      //   Toastify({
-      //     text: 
-      //     duration: 3000,
-      //     backgroundColor: "#ff4d4d"
-      // }).showToast();
-
-        console.log("entró al false: ", result);
+        setError(toast.error(result.message));
       }
     } catch (error) {
-      console.error(error);
-      // Toastify({
-      //     text: "Error, inténtelo más tarde",
-      //     duration: 3000,
-      //     backgroundColor: "#ff4d4d"
-      // }).showToast();
+      setError(toast.error(error));
     }
   };
 
   return (
     <>
-   
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Login | TU PODCAST</title>
+      </Helmet>
+      {error && <Notify error={error} />}
       <section className="overflow-hidden bg-course">
         <div className="px-0 py-0 px-sm-04 py-sm-5  background-radial-gradient d-flex justify-content-center align-items-center">
           <div className="container my-5  ">
             <Row className="gx-lg-5 align-items-center mb-5 ">
               <div
                 className="col-lg-7 mb-5 mb-lg-0 order-2 order-md-1"
-                style={{zIndex: "10"}}
+                style={{ zIndex: "10" }}
               >
                 <h1 className="my-1 my-sm-3 display-5 fw-bold ls-tight text-light">
                   Bienvenido al gestor de <br />
-                  <span className="text-secondarys">Archivos de Tu Podcast</span>
+                  <span className="text-secondarys">
+                    Archivos de Tu Podcast
+                  </span>
                   <br />
                   para clientes.
                 </h1>
@@ -95,11 +94,10 @@ const {login}  = userAuth();
                     </h2>
                     <form className="m-0 p-0" onSubmit={handleLogin}>
                       <div className="row">
-                        <div className="form-outline mb-4">
+                        <div className="form-outline mb-2">
                           <label
                             className="form-label text-light"
                             htmlFor="email"
-                            
                           >
                             Correo electrónico
                           </label>
@@ -108,10 +106,35 @@ const {login}  = userAuth();
                             autoComplete=""
                             id="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => {
+                              setEmail(e.target.value);
+                              if (!validateEmail(e.target.value)) {
+                                setErrorData((prevErrors) => ({
+                                  ...prevErrors,
+                                  emaildata: "Correo electrónico no válido",
+                                }));
+                              } else {
+                                setErrorData((prevErrors) => ({
+                                  ...prevErrors,
+                                  emaildata: "",
+                                }));
+                              }
+                            }}
                             placeholder="Escribe tu correo electrónico"
                             className="form-control"
                           />
+                          {
+                            <p className="error-container">
+                              {errordata.emaildata && (
+                                <small
+                                  className="error"
+                                  style={{ color: "red" }}
+                                >
+                                  {errordata.emaildata}
+                                </small>
+                              )}
+                            </p>
+                          }
                         </div>
 
                         <div className="form-outline mb-4">
@@ -125,10 +148,31 @@ const {login}  = userAuth();
                             type="password"
                             value={password}
                             id="password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => {
+                              setPassword(e.target.value);
+                              if (!validateLength(e.target.value, 5)) {
+                                setErrorData((prevErrors) => ({
+                                  ...prevErrors,
+                                  passdata:
+                                    "La contraseña debe ser mayor a 6 caracteres",
+                                }));
+                              } else {
+                                setErrorData((prevErrors) => ({
+                                  ...prevErrors,
+                                  passdata: "",
+                                }));
+                              }
+                            }}
                             placeholder="Escribe una contraseña"
                             className="form-control"
                           />
+                          <p className="error-container">
+                            {errordata.passdata && (
+                              <small className="error" style={{ color: "red" }}>
+                                {errordata.passdata}
+                              </small>
+                            )}
+                          </p>
                         </div>
 
                         <div className="d-flex justify-content-center text-light">
@@ -147,4 +191,4 @@ const {login}  = userAuth();
       </section>
     </>
   );
-}
+};

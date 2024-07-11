@@ -1,7 +1,7 @@
 
 
 
-import { userAuth } from '../hooks/AuthProvider'
+import { userAuth } from '../../hooks/AuthProvider';
 import NavBar from './NavBar';
 import { Navigate, Outlet } from 'react-router-dom';
 

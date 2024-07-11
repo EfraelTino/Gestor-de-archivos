@@ -1,5 +1,5 @@
 
-import { PodcastGeneral } from "../components/PodcastGeneral";
+import { PodcastGeneral } from "../components/user/PodcastGeneral";
 
 export default function Principal() {
 

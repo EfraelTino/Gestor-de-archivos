@@ -5,6 +5,7 @@ const AuthContext = createContext();
 export const AuthProvider =({ children }) => {
     const [user, setuser] = useLocalStorage("user", null);
     const [podcasts, setPodcasts] = useLocalStorage("podcasts", null); // Cambiado el nombre del localStorage
+    const [formid, setFormId] = useLocalStorage("formid", null); 
     const navigate = useNavigate();
     const login = async (data)=>{
         setuser(data);
@@ -14,6 +15,9 @@ export const AuthProvider =({ children }) => {
         setuser(null);
         navigate ("/", {replace:true});
     }
+    const setFormIdData = async (data) => {
+        setFormId(data);
+      };
    const updatePodcasts = async (data) =>{
     setPodcasts(data);
    }
@@ -23,11 +27,13 @@ export const AuthProvider =({ children }) => {
             user,
             login,
             logout,
+            formid,
+            setFormIdData,
             // contexto de podcast
             podcasts,
             updatePodcasts
         }),
-        [user, podcasts]
+        [user, podcasts, formid]
     )
 
 return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
